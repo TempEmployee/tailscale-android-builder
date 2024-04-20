@@ -1,0 +1,15 @@
+name: 构建docker
+
+on: workflow_dispatch
+
+jobs:
+  make_docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - run: |
+          make docker
+          docker tag tailscale-android-builder ghcr.io/<github_username>/tailscale-android-builder
+          docker push ghcr.io/<github_username>/tailscale-android-builder
