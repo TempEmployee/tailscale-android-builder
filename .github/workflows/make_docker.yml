@@ -6,10 +6,10 @@ jobs:
   make_docker:
     runs-on: ubuntu-latest
     steps:
-      - name: 克隆项目
-        uses: actions/checkout@v3
       - name: 查看当前路径
         run: pwd
+      - name: 查看当前目录下的文件
+        run: ls -alh
       - name: 创建镜像
         run: make docker
       - name: 为镜像打标签
