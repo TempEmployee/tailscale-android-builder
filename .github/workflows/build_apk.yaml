@@ -1,0 +1,33 @@
+on: workflow_dispatch
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    container:
+      image: ghcr.io/tempemployee/tailscale-android-builder
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: 克隆项目
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: 构建补丁包
+        env:
+          TAILSCALE_SERVER: ${{ secrets.TAILSCALE_SERVER }}
+        run: |
+          make patch
+      - name: 构建APK
+        env:
+          TAILSCALE_SERVER: ${{ secrets.TAILSCALE_SERVER }}
+        run: |
+          make apk
+      - name: 保存制品包
+        uses: actions/upload-artifact@v3
+        with:
+          name: 构建APK
+          path: tailscale-android/tailscale-debug.apk
