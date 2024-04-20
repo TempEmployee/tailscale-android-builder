@@ -6,17 +6,27 @@ jobs:
   make_docker:
     runs-on: ubuntu-latest
     steps:
+      - name: 获取项目小写用户名
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
       - name: 克隆项目
         uses: actions/checkout@v3
         with:
           submodules: true
       - name: 查看当前路径
-        run: pwd
+        run: |
+          pwd
       - name: 查看当前目录下的文件
-        run: ls -alh
+        run: |
+          ls -alh
       - name: 创建镜像
-        run: make docker
+        run: |
+          make docker
       - name: 为镜像打标签
-        run: docker tag tailscale-android-builder ghcr.io/${{ github.repository_owner }}/tailscale-android-builder
+        run: |
+          docker tag tailscale-android-builder ghcr.io/${{ OWNER_LC }}/tailscale-android-builder
       - name: 推送镜像
-        run: docker push ghcr.io/${{ github.repository_owner }}/tailscale-android-builder
+        run: |
+          docker push ghcr.io/${{ OWNER_LC }}/tailscale-android-builder
