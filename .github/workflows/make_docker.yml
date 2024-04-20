@@ -5,6 +5,10 @@ on: workflow_dispatch
 jobs:
   make_docker:
     runs-on: ubuntu-latest
+    # 这里用于定义 GITHUB_TOKEN 的权限
+    permissions:
+      packages: write
+      contents: read
     steps:
       - name: 获取项目小写用户名
         run: |
@@ -36,26 +40,7 @@ jobs:
           make docker
       - name: 为镜像打标签
         run: |
-          docker tag ${{ github.repository }} ghcr.io/${{ github.repository }}
-  make_apk:
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/${{ github.repository }}
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ github.token }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: make apk
-        env:
-          TAILSCALE_SERVER: ${{ secrets.TAILSCALE_SERVER }}
+          docker tag ${{ github.repository }} ghcr.io/"$OWNER_LC"/${{ github.repository }}
+      - name: 发布镜像
         run: |
-          make patch
-          make apk
-      - name: save apk artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: apk
-          path: tailscale-android/tailscale-debug.apk
+          docker push ghcr.io/"$OWNER_LC"/${{ github.repository }}
