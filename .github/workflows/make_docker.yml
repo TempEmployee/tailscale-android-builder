@@ -36,7 +36,7 @@ jobs:
           make docker
       - name: 为镜像打标签
         run: |
-          docker tag tailscale-android-builder ghcr.io/"$OWNER_LC"/tailscale-android-builder
+          docker tag tailscale-android-builder ghcr.io/tailscale-android-builder
       - name: 推送镜像
         run: |
-          docker push ghcr.io/"$OWNER_LC"/tailscale-android-builder
+          docker push ghcr.io/tailscale-android-builder
