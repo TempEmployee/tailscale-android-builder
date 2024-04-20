@@ -36,7 +36,26 @@ jobs:
           make docker
       - name: 为镜像打标签
         run: |
-          docker tag tailscale-android-builder ghcr.io/tailscale-android-builder
-      - name: 推送镜像
+          docker tag ${{ github.repository }} ghcr.io/${{ github.repository }}
+  make_apk:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: make apk
+        env:
+          TAILSCALE_SERVER: ${{ secrets.TAILSCALE_SERVER }}
         run: |
-          docker push ghcr.io/tailscale-android-builder
+          make patch
+          make apk
+      - name: save apk artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: tailscale-android/tailscale-debug.apk
