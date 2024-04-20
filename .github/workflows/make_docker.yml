@@ -30,7 +30,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ GITHUB_TOKEN }}
+          password: ${{ github.token }}
       - name: 创建镜像
         run: |
           make docker
