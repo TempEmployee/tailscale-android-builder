@@ -12,5 +12,5 @@ jobs:
       - run: |
           pwd
           make docker
-          docker tag tailscale-android-builder ghcr.io/<github_username>/tailscale-android-builder
-          docker push ghcr.io/<github_username>/tailscale-android-builder
+          docker tag tailscale-android-builder ghcr.io/TempEmployee/tailscale-android-builder
+          docker push ghcr.io/TempEmployee/tailscale-android-builder
