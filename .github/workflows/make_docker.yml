@@ -6,6 +6,10 @@ jobs:
   make_docker:
     runs-on: ubuntu-latest
     steps:
+      - name: 克隆项目
+        uses: actions/checkout@v3
+        with:
+          submodules: true
       - name: 查看当前路径
         run: pwd
       - name: 查看当前目录下的文件
